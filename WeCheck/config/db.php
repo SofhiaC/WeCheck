@@ -2,7 +2,7 @@
 class Database {
     private static $host = "127.0.0.1";   // ou localhost
     private static $port = "3306";        // porta do Laragon
-    private static $db_name = "WeCheck"; // seu banco
+    private static $db_name = "wecheck"; // seu banco
     private static $username = "root";    // padrão do Laragon
     private static $password = "";        // senha padrão do root no Laragon é vazia
     private static $conn;
