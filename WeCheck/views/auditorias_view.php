@@ -29,7 +29,7 @@
 
         <div class="novo-projeto">
             <img src="../assets/icons/CriarProjeto.png" alt="Ícone de adicionar">
-            <a href="#">Novo Projeto</a>
+            <a href="index.php?rota=auditoria_criacao">Novo Projeto</a>
             <p>Faça upload dos seus arquivos de requisitos para iniciar uma nova auditoria.</p>
         </div>
 
@@ -40,10 +40,9 @@
                 <div class="projeto">
                     <h2><?= htmlspecialchars($auditoria['nome_auditoria']) ?></h2>
                     <p><?= htmlspecialchars($auditoria['empresa_auditoria']) ?></p>
-                    <?php if (!empty($auditoria['documento_pdf'])): ?>
-                        <a href="../uploads/<?= htmlspecialchars($auditoria['documento_pdf']) ?>" target="_blank">Ver Documento</a>
-                    <?php endif; ?>
-                    <a href="router.php?rota=auditoria&id=<?= $auditoria['id_auditoria'] ?>">Abrir Auditoria</a>
+                    <a href="index.php?rota=auditoria&id=<?= $auditoria['id_auditoria'] ?>">Abrir Auditoria</a> 
+                    <!-- ver redirecionamento depois vendo como vai ser de fato essa rota pra auditoria -->
+                    <p>Data de criação: <?= htmlspecialchars($auditoria['data_criacao']) ?></p>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
