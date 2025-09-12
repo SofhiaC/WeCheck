@@ -1,0 +1,45 @@
+CREATE TABLE tb_usuario (
+	id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+	nome_usuario VARCHAR(100) NOT NULL,
+	email_usuario VARCHAR(100) UNIQUE NOT NULL,
+	senha_usuario VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE tb_auditoria (
+	id_auditoria INT AUTO_INCREMENT PRIMARY KEY,
+	nome_auditoria VARCHAR(150) NOT NULL,
+	empresa_auditoria VARCHAR (150),
+	documento_pdf VARCHAR(255),
+	id_usuario INT,
+	FOREIGN KEY (id_usuario) REFERENCES tb_usuario(id_usuario)
+);
+
+CREATE TABLE tb_responsavel (
+	id_responsavel INT AUTO_INCREMENT PRIMARY KEY,
+	nome_responsavel VARCHAR(100),
+	email_responsavel VARCHAR(100),
+	cargo_responsavel VARCHAR(100),
+	id_auditoria INT,
+	FOREIGN KEY (id_auditoria) REFERENCES tb_auditoria(id_auditoria)
+);
+
+CREATE TABLE tb_checklist (
+	id_item INT AUTO_INCREMENT PRIMARY KEY,
+	id_auditoria INT, 
+	nome_item TEXT NOT NULL,
+	resultado_item ENUM('conforme', 'nao_conforme', 'nao_aplicavel'),
+	FOREIGN KEY (id_auditoria) REFERENCES tb_auditoria(id_auditoria)
+);
+
+CREATE TABLE tb_nc (
+	id_nc INT AUTO_INCREMENT PRIMARY KEY,
+	id_checklist INT,
+	data_inicial DATE,
+	data_conclusao DATE,
+	classificacao_nc ENUM('leve', 'moderado', 'urgente'),
+	acao_corretiva TEXT,
+	observacao TEXT, 
+	id_responsavel INT, 
+	FOREIGN KEY (id_checklist) REFERENCES tb_checklist(id_item),
+	FOREIGN KEY (id_responsavel) REFERENCES tb_responsavel(id_responsavel)
+);
