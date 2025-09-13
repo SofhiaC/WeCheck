@@ -46,5 +46,13 @@ class ChecklistController {
         $stmt->execute([$idAuditoria]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public static function atualizarResultado($idItem, $resultado) {
+    $db = Database::getConnection();
+
+    $sql = "UPDATE tb_checklist SET resultado_item = ? WHERE id_item = ?";
+    $stmt = $db->prepare($sql);
+    return $stmt->execute([$resultado, $idItem]);
+}
 }
 ?>

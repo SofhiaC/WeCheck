@@ -62,7 +62,7 @@ switch ($rota) {
 
     case 'checklist':
     require_once __DIR__ . '/../controllers/ChecklistController.php';
-    require_once __DIR__ . '/../controllers/AuditoriaController.php';
+    require_once __DIR__ . '/../controllers/ListarAuditoriaController.php';
 
     $idAuditoria = $_SESSION['id_auditoria'] ?? null;
 
@@ -81,7 +81,7 @@ switch ($rota) {
         }
     }
 
-    $auditoria = AuditoriaController::pegarAuditoria($idAuditoria);
+    $auditoria = ListarAuditoriaController::pegarAuditoria($idAuditoria);
     $itens = ChecklistController::listarItens($idAuditoria);
 
     require __DIR__ . '/../views/checklist_view.php';
@@ -127,4 +127,38 @@ switch ($rota) {
         }
     }
     break;
+
+    case 'processo_auditoria':
+        $idAuditoria = $_SESSION['id_auditoria'] ?? null;
+
+        if (!$idAuditoria) {
+            header('Location: index.php?rota=auditorias');
+            exit;
+        }
+
+        require_once __DIR__ . '/../controllers/ProcessoAuditoriaController.php';
+
+        $auditoria = ProcessoAuditoriaController::pegarAuditoria($idAuditoria);
+        $itens = ProcessoAuditoriaController::listarItensAuditoria($idAuditoria);
+
+        $arquivo = __DIR__ . '/../views/processo_auditoria_view.php';
+            if (!file_exists($arquivo)) {
+                die("Arquivo da view não encontrado em: $arquivo");
+            } else {
+                require $arquivo;
+            }
+        break;
+
+        case 'atualizar_resultado':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $idItem = $_POST['id_item'] ?? null;
+                $resultado = $_POST['resultado'] ?? null;
+
+                if ($idItem && $resultado) {
+                    require_once __DIR__ . '/../controllers/ChecklistController.php';
+                    $sucesso = ChecklistController::atualizarResultado($idItem, $resultado);
+                    echo $sucesso ? 'ok' : 'erro';
+                }
+            }
+            exit;
 }

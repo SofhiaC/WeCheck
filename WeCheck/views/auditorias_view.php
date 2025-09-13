@@ -1,5 +1,4 @@
 <?php
-// auditorias_view.php - REMOVA session_start() e a conexão duplicada
 $idUsuario = $_SESSION['id_usuario'] ?? null;
 
 if (!$idUsuario) {

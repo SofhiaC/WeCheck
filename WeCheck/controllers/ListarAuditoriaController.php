@@ -1,5 +1,5 @@
 <?php
-class AuditoriaController {
+class ListarAuditoriaController {
     public static function listarAuditorias() {
         $pdo = Database::getConnection();
         $idUsuario = $_SESSION['id_usuario'];
@@ -28,5 +28,5 @@ class AuditoriaController {
     }
 }
 
-$auditorias = AuditoriaController::listarAuditorias();
+$auditorias = ListarAuditoriaController::listarAuditorias();
 ?>

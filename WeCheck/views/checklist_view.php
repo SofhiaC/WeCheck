@@ -6,11 +6,11 @@ if (!$idAuditoria) {
     exit;
 }
 
-require_once __DIR__ . '/../controllers/AuditoriaController.php';
+require_once __DIR__ . '/../controllers/ListarAuditoriaController.php';
 require_once __DIR__ . '/../controllers/ChecklistController.php';
 
 // Pegar dados da auditoria
-$auditoria = AuditoriaController::pegarAuditoria($idAuditoria);
+$auditoria = ListarAuditoriaController::pegarAuditoria($idAuditoria);
 if (!$auditoria) die("Auditoria não encontrada.");
 
 // Pegar itens do checklist
@@ -58,7 +58,7 @@ $itens = ChecklistController::listarItens($idAuditoria);
 
         <div>
             <?php echo htmlspecialchars(count($itens)) . " itens no checklist."; ?>
-            <a href="#">Iniciar Auditoria</a>
+            <a href="index.php?rota=processo_auditoria">Iniciar Auditoria</a>
         </div>
     </main>
 
