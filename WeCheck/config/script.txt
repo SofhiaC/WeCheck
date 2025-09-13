@@ -28,6 +28,7 @@ CREATE TABLE tb_checklist (
 	id_item INT AUTO_INCREMENT PRIMARY KEY,
 	id_auditoria INT, 
 	nome_item TEXT NOT NULL,
+	ordem_item INT,
 	resultado_item ENUM('conforme', 'nao_conforme', 'nao_aplicavel'),
 	FOREIGN KEY (id_auditoria) REFERENCES tb_auditoria(id_auditoria)
 );
