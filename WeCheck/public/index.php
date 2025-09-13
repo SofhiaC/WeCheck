@@ -62,19 +62,48 @@ switch ($rota) {
 
     case 'checklist':
     require_once __DIR__ . '/../controllers/ChecklistController.php';
+    require_once __DIR__ . '/../controllers/AuditoriaController.php';
 
     $idAuditoria = $_SESSION['id_auditoria'] ?? null;
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && $idAuditoria) {
+    if (!$idAuditoria) {
+        header('Location: index.php?rota=auditorias');
+        exit;
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nomeItem = $_POST['nome_item'] ?? null;
 
         if ($nomeItem) {
             ChecklistController::adicionarItem($idAuditoria, $nomeItem);
+            // opcional: definir uma variável para mostrar mensagem
+            $mensagem = "Item adicionado com sucesso!";
         }
     }
 
-    // lista os itens dessa auditoria
+    $auditoria = AuditoriaController::pegarAuditoria($idAuditoria);
     $itens = ChecklistController::listarItens($idAuditoria);
+
     require __DIR__ . '/../views/checklist_view.php';
+    break;
+
+
+    case 'adicionar_item':
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $idAuditoria = $_POST['id_auditoria'] ?? null;
+        $nomeItem = $_POST['nome_item'] ?? null;
+
+        if ($idAuditoria && $nomeItem) {
+            require_once __DIR__ . '/../controllers/ChecklistController.php';
+            $resultado = ChecklistController::adicionarItem($idAuditoria, $nomeItem);
+
+            if ($resultado['success']) {
+                header("Location: index.php?rota=checklist"); // volta para a página de checklist
+                exit;
+            } else {
+                die($resultado['message']);
+            }
+        }
+    }
     break;
 }
