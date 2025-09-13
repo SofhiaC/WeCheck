@@ -1,1 +1,23 @@
-uploads/documents/
+# Ignorar arquivos de upload
+/WeCheck/uploads/documents/*.[pP][dD][fF]
+/WeCheck/uploads/documents/*.[dD][oO][cC]
+/WeCheck/uploads/documents/*.[dD][oO][cC][xX]
+
+# Ignorar dependências do PHP
+/WeCheck/vendor/
+
+# Ignorar arquivos de configuração local
+.env
+config.php
+
+# Ignorar logs e caches
+*.log
+*.cache
+/tmp/
+*.tmp
+
+# Ignorar IDEs e sistema operacional
+.idea/
+.vscode/
+*.DS_Store
+Thumbs.db
