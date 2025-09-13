@@ -88,7 +88,18 @@ $itens = ChecklistController::listarItens($idAuditoria);
             <img src="../assets/icons/AdicaoResponsavel.png" alt="Icone de perfil">
             <h2>Adicionar Responsável</h2>
             <form id="formAdicionarResponsavel" method="POST" action="index.php?rota=adicionar_responsavel">
-                <label>Nome do Responsável: <input type="text" name="nome_responsavel" required></label>
+                <label>Email: <br>
+                <input type="email" name="email_responsavel" required></label>
+                <br>
+                <label>Nome: <br>
+                <input type="text" name="nome_responsavel" required></label>
+                <br>
+                <label>Cargo: <br>
+                <input type="text" name="cargo_responsavel" required></label>
+                <br>
+                <label>Setor: <br>
+                <input type="text" name="setor_responsavel" required>
+                <br><br>
                 <button type="submit">Adicionar</button>
             </form>
         </div>
@@ -101,9 +112,17 @@ $itens = ChecklistController::listarItens($idAuditoria);
             <img src="../assets/icons/ListaResponsaveis.png" alt="Icone de grupo">
             <h2>Responsáveis</h2>
             <ul>
-                <!-- Aqui você pode carregar via PHP os responsáveis -->
-                <li>Responsável 1</li>
-                <li>Responsável 2</li>
+                <?php
+                require_once __DIR__ . '/../controllers/ResponsavelController.php';
+                $responsaveis = ResponsavelController::listarResponsaveis($idAuditoria);
+
+                foreach ($responsaveis as $resp):
+                ?>
+                    <li><?php echo htmlspecialchars($resp['nome_responsavel']); ?> 
+                        (<?php echo htmlspecialchars($resp['email_responsavel']); ?>) - 
+                        <?php echo htmlspecialchars($resp['cargo_responsavel']); ?>
+                    </li>
+                <?php endforeach; ?>
             </ul>
         </div>
     </div>

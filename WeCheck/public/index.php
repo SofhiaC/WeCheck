@@ -106,4 +106,25 @@ switch ($rota) {
         }
     }
     break;
+
+    case 'adicionar_responsavel':
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $idAuditoria = $_SESSION['id_auditoria'] ?? null;
+        $nome = $_POST['nome_responsavel'] ?? null;
+        $email = $_POST['email_responsavel'] ?? null;
+        $cargo = $_POST['cargo_responsavel'] ?? null;
+
+        if ($idAuditoria && $nome && $email) {
+            require_once __DIR__ . '/../controllers/ResponsavelController.php';
+            $resultado = ResponsavelController::adicionarResponsavel($idAuditoria, $nome, $email, $cargo);
+
+            if ($resultado['success']) {
+                header("Location: index.php?rota=checklist"); // volta para checklist
+                exit;
+            } else {
+                die($resultado['message']);
+            }
+        }
+    }
+    break;
 }
