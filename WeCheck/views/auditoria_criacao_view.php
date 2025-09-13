@@ -1,11 +1,10 @@
 <?php
-    session_start();
-    $idUsuario = $_SESSION['id_usuario'] ?? null;
+$idUsuario = $_SESSION['id_usuario'] ?? null;
 
-    if (!$idUsuario) {
-        header('Location: index.php?rota=login'); // ou tela inicial
-        exit;
-    }
+if (!$idUsuario) {
+    header('Location: index.php?rota=login');
+    exit;
+}
 ?> 
 
 <html lang="pt-br">
@@ -27,7 +26,7 @@
     <main>
         <h1>Criando nova auditoria</h1>
         
-        <form action="index.php?rota=criar_auditoria" method="POST">
+        <form action="index.php?rota=criar_auditoria" method="POST" enctype="multipart/form-data">
             <label>
                 Nome do projeto
                 <input type="text" name="nome_auditoria" placeholder="Nome do projeto auditado" required>

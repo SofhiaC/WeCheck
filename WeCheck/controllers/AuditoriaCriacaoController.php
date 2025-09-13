@@ -1,27 +1,26 @@
 <?php
-require __DIR__ . "/../config/db.php";
-    $pdo = Database::getConnection();
-
-    $idUsuario = $_SESSION['id_usuario'];
-
-
 class AuditoriaCriacaoController {
     public static function criarAuditoria($idUsuario, $nomeAuditoria, $empresaAuditoria, $documentoPdf) {
-        require __DIR__ . "/../config/db.php";
-        $pdo = Database::getConnection();
+        $pdo = Database::getConnection(); // Conexão única
 
-        $stmt = $pdo->prepare("INSERT INTO tb_auditoria 
-            (id_usuario, nome_auditoria, empresa_auditoria, documento_pdf, data_criacao) 
-            VALUES (?, ?, ?, ?, NOW())");
+        try {
+            $stmt = $pdo->prepare("INSERT INTO tb_auditoria 
+                (id_usuario, nome_auditoria, empresa_auditoria, documento_pdf, data_criacao) 
+                VALUES (?, ?, ?, ?, NOW())");
 
-        if ($stmt->execute([$idUsuario, $nomeAuditoria, $empresaAuditoria, $documentoPdf])) {
-            session_start();
-            $_SESSION['id_auditoria'] = $pdo->lastInsertId();
-            header('Location: ../views/checklist_view.php');
+            if ($stmt->execute([$idUsuario, $nomeAuditoria, $empresaAuditoria, $documentoPdf])) {
+                $idAuditoria = $pdo->lastInsertId();   // salva em variável
+                $_SESSION['id_auditoria'] = $idAuditoria;
+
+                header("Location: index.php?rota=checklist&id_auditoria=" . $idAuditoria);
+                exit;
+            } else {
+                throw new Exception("Erro ao inserir auditoria");
+            }
+        } catch (Exception $e) {
+            error_log("Erro ao criar auditoria: " . $e->getMessage());
+            header('Location: index.php?rota=auditoria_criacao&erro=1');
             exit;
-        } else {
-            $errorInfo = $stmt->errorInfo();
-            echo "Erro ao cadastrar: " . $errorInfo[2];
         }
     }
 }

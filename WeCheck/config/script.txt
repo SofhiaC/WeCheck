@@ -10,6 +10,7 @@ CREATE TABLE tb_auditoria (
 	nome_auditoria VARCHAR(150) NOT NULL,
 	empresa_auditoria VARCHAR (150),
 	documento_pdf VARCHAR(255),
+	data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 	id_usuario INT,
 	FOREIGN KEY (id_usuario) REFERENCES tb_usuario(id_usuario)
 );

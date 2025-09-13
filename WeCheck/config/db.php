@@ -1,27 +1,28 @@
 <?php
+// db.php
 class Database {
-    private static $host = "127.0.0.1";   // ou localhost
-    private static $port = "3306";        // porta do Laragon
-    private static $db_name = "wecheck"; // seu banco
-    private static $username = "root";    // padrão do Laragon
-    private static $password = "";        // senha padrão do root no Laragon é vazia
-    private static $conn;
-
-    public static function getConnection() {
-        if (!self::$conn) {
-            try {
-                self::$conn = new PDO(
-                    "mysql:host=" . self::$host . ";port=" . self::$port . ";dbname=" . self::$db_name,
-                    self::$username,
-                    self::$password,
-                    array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
-                );
-                self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            } catch (PDOException $e) {
-                die("Erro na conexão: " . $e->getMessage());
-            }
+    private static $instance = null;
+    private $connection;
+    
+    private function __construct() {
+        $host = 'localhost';
+        $dbname = 'wecheck';
+        $username = 'root';
+        $password = '';
+        
+        try {
+            $this->connection = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch(PDOException $e) {
+            die("Erro de conexão: " . $e->getMessage());
         }
-        return self::$conn;
+    }
+    
+    public static function getConnection() {
+        if (self::$instance === null) {
+            self::$instance = new Database();
+        }
+        return self::$instance->connection;
     }
 }
 ?>

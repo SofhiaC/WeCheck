@@ -1,11 +1,11 @@
 <?php
-    session_start();
-    $idUsuario = $_SESSION['id_usuario'] ?? null;
+// auditorias_view.php - REMOVA session_start() e a conexão duplicada
+$idUsuario = $_SESSION['id_usuario'] ?? null;
 
-    if (!$idUsuario) {
-        header('Location: index.php?rota=login'); // ou tela inicial
-        exit;
-    }
+if (!$idUsuario) {
+    header('Location: index.php?rota=login');
+    exit;
+}
 ?> 
 
 <html lang="pt-br">
@@ -20,6 +20,7 @@
         <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
         <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
 
+        <a href="index.php?rota=home">Início</a>
         <a href="#">Conta</a>
     </header>
 
@@ -33,29 +34,24 @@
             <p>Faça upload dos seus arquivos de requisitos para iniciar uma nova auditoria.</p>
         </div>
 
-
         <div class="lista-projetos">
-        <?php if (!empty($auditorias)): ?>
-            <?php foreach ($auditorias as $auditoria): ?>
-                <div class="projeto">
-                    <h2><?= htmlspecialchars($auditoria['nome_auditoria']) ?></h2>
-                    <p><?= htmlspecialchars($auditoria['empresa_auditoria']) ?></p>
-                    <a href="index.php?rota=auditoria&id=<?= $auditoria['id_auditoria'] ?>">Abrir Auditoria</a> 
-                    <!-- ver redirecionamento depois vendo como vai ser de fato essa rota pra auditoria -->
-                    <p>Data de criação: <?= htmlspecialchars($auditoria['data_criacao']) ?></p>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p>Você ainda não possui auditorias cadastradas.</p>
-        <?php endif; ?>
-    </div>
-        
-
+            <?php if (!empty($auditorias)): ?>
+                <?php foreach ($auditorias as $auditoria): ?>
+                    <div class="projeto">
+                        <h2><?= htmlspecialchars($auditoria['nome_auditoria']) ?></h2>
+                        <p>Empresa: <?= htmlspecialchars($auditoria['empresa_auditoria']) ?></p>
+                        <a href="index.php?rota=auditoria&id=<?= $auditoria['id_auditoria'] ?>">Abrir Auditoria</a>
+                        <p>Data de criação: <?= htmlspecialchars($auditoria['data_criacao']) ?></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Você ainda não possui auditorias cadastradas.</p>
+            <?php endif; ?>
+        </div>
     </main>
 
     <footer>
         <p>© 2025 WeCheck. Por Midup.</p>
     </footer>
-    
 </body>
 </html>
