@@ -1,4 +1,4 @@
-/* geral da página */
+/* --- estilos gerais (sua base) --- */
 * {
     margin: 0;
     padding: 0;
@@ -93,7 +93,7 @@ main p{
 .controle-responsaveis .botoes-responsaveis {
     display: flex;
     justify-content: center;
-} 
+}
 
 .controle-responsaveis button#btnAdicionarResponsavel{
     margin: 10px;
@@ -131,7 +131,7 @@ main h3{
     align-items: center;
     margin-left: 5%;
     margin-right: 5%;
-    background-color: #DFECE2; 
+    background-color: #DFECE2;
     border: none;
     width: 90%;
     cursor: pointer;
@@ -149,6 +149,11 @@ main h3{
 }
 
 /* listando itens do checklist */
+ul {
+    list-style: none;
+    margin-top: 10px;
+}
+
 ul li {
     display: flex;
     align-items: center;
@@ -157,15 +162,14 @@ ul li {
     border: 1px solid #ccc;
     width: 90%;
     margin-left: 5%;
+    background: #fff;
+    margin-bottom: 8px;
+    border-radius: 6px;
 }
 
-
-ul li p {
-    margin: 0;
+ul li span {
     color: #201C3F;
 }
-
-
 
 /* footerzinho */
 footer {
@@ -186,7 +190,7 @@ footer a{
     border-radius: 5px;
     transition: background-color 0.3s;
     background-color: #201C3F;
-    position: absolute; 
+    position: absolute;
     right: 5%;
     bottom: 15%;
     height: 50px;
@@ -198,3 +202,126 @@ footer p{
     bottom: 30%;
 }
 
+/* --------------------------------
+   ESTILOS DOS MODAIS (<dialog>)
+   -------------------------------- */
+
+/* básico do dialog */
+dialog {
+    border: none;
+    border-radius: 8px;
+    padding: 0;
+    max-width: 720px;
+    width: calc(100% - 40px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    background: transparent; /* modal-conteudo faz fundo */
+}
+
+/* backdrop nativo */
+dialog::backdrop {
+    background: rgba(0,0,0,0.45);
+}
+
+/* conteudo interno do modal */
+.modal-conteudo {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 8px;
+    position: relative;
+}
+
+/* botão fechar */
+.modal-conteudo .fechar {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    position: absolute;
+    right: 12px;
+    top: 8px;
+    cursor: pointer;
+    color: #333;
+}
+
+/* imagem e titulos dentro do modal */
+.modal-conteudo img {
+    width: 48px;
+    height: 48px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.modal-conteudo h2 {
+    margin-bottom: 10px;
+    color: #201C3F;
+}
+
+/* listas internas do modal */
+.modal-conteudo .lista-responsaveis {
+    list-style: none;
+    margin-top: 8px;
+    padding-left: 0;
+}
+
+.modal-conteudo .lista-responsaveis li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* inputs e labels */
+.modal-conteudo label {
+    display: block;
+    margin: 8px 0;
+    color: #201C3F;
+}
+
+.modal-conteudo input[type="text"],
+.modal-conteudo input[type="email"]{
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 6px;
+}
+
+/* botao submit do modal */
+.modal-conteudo button[type="submit"] {
+    margin-top: 12px;
+    background-color: #201C3F;
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* fallback para navegadores sem suporte a <dialog> */
+/* escondemos por padrão se não estiver aberto */
+dialog:not([open]):not([data-open]) {
+    display: none;
+}
+
+/* fallback: quando abrimos via JS (atributo data-open) */
+dialog[data-open] {
+    display: block;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+/* overlay para fallback (criamos com pseudo-elemento no body quando .dialog-open) */
+body.dialog-open::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 9998;
+}
+
+/* responsividade */
+@media (max-width: 480px) {
+    main h1 { font-size: 1.8rem; }
+    .modal-conteudo { padding: 16px; }
+    .modal-conteudo img { width: 40px; height: 40px; }
+}
