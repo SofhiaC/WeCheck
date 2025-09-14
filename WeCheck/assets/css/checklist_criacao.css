@@ -1,0 +1,199 @@
+/* geral da página */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: Arial, 'Helvetica', sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #fff;
+    color: #201C3F;
+    padding: 20px 0;
+    display: flex;
+}
+
+/* logo da navbar */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+/* botoes da navbar */
+.botoes-nav {
+    margin-left: auto;
+    margin-right: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.botoes-nav a#inicio{
+    text-decoration: none;
+    color: #201C3F;
+    padding: 10px 15px;
+    border: 1px solid #201C3F;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.botoes-nav a#inicio:hover {
+    background-color: #201C3F;
+    color: #fff;
+}
+
+.botoes-nav a#conta {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    background-color: #201C3F;
+}
+
+.botoes-nav a#conta:hover {
+    background-color: #fff;
+    border: 1px solid #201C3F;
+    color: #201C3F;
+}
+
+main{
+    padding-bottom: 70px;
+}
+
+/* textinhos h1 e p*/
+main h1{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+main p{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 1.2rem;
+}
+
+.controle-responsaveis p{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controle-responsaveis .botoes-responsaveis {
+    display: flex;
+    justify-content: center;
+} 
+
+.controle-responsaveis button#btnAdicionarResponsavel{
+    margin: 10px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #29A746;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.controle-responsaveis button#btnVizualizarResponsavel{
+    margin: 10px;
+    padding: 10px 15px;
+    border: #29A746 solid 1px;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #29A746;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* titulo da listagem do checklist */
+main h3{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#btnAdicionarItem{
+    display: flex;
+    align-items: center;
+    margin-left: 5%;
+    margin-right: 5%;
+    background-color: #DFECE2; 
+    border: none;
+    width: 90%;
+    cursor: pointer;
+}
+
+.botao-adicionar-item {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+    background-color: #DFECE2;
+}
+
+.botao-adicionar-item img {
+    margin-right: 15px;
+}
+
+/* listando itens do checklist */
+ul li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    width: 90%;
+    margin-left: 5%;
+}
+
+
+ul li p {
+    margin: 0;
+    color: #201C3F;
+}
+
+
+
+/* footerzinho */
+footer {
+    background-color: lightgray;
+    color: #201C3F;
+    display: flex;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+}
+
+footer a{
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    background-color: #201C3F;
+    position: absolute; 
+    right: 5%;
+    bottom: 15%;
+    height: 50px;
+}
+
+footer p{
+    position: absolute;
+    left: 5%;
+    bottom: 30%;
+}

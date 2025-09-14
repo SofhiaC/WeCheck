@@ -97,23 +97,13 @@ main a:hover{
     color: #201C3F;
 }
 
-/* footerzinho */
-footer {
-    background-color: #201C3F;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
 
 /* configurações gerais do form */
 form{
     max-width: 80%;
     margin: 20px auto;
     padding: 20px;
-
+    
 }
 
 /* labels */
@@ -143,4 +133,15 @@ button {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+}
+
+/* footerzinho */
+footer {
+    background-color: #201C3F;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }

@@ -22,31 +22,42 @@ $itens = ChecklistController::listarItens($idAuditoria);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/modal_checklist.css">
+    <link rel="stylesheet" href="../assets/css/checklist_criacao.css">
     <title>WeCheck</title>
     
 </head>
 <body>
     <header>
-        <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
-        <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
-        <a href="index.php?rota=auditorias">Início</a> 
-        <a href="#">Conta</a>
+        <div class="logo">
+            <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
+            <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
+        </div>
+        <div class="botoes-nav">
+            <a id="inicio" href="index.php?rota=cadastro">Início</a> 
+            <a id="conta" href="#">Conta</a>
+        </div>
     </header>
 
     <main>
         <h1><?php echo htmlspecialchars($auditoria['nome_auditoria']); ?></h1>
         <p><?php echo htmlspecialchars($auditoria['empresa_auditoria']); ?></p>
 
-        <p>Adicione os responsáveis pelo projeto da empresa:</p>
-        <button id="btnAdicionarResponsavel">Adicionar Responsável</button>
-        <button id="btnVizualizarResponsavel">Visualizar Responsáveis</button>
-
-        <h3>Liste os itens do CheckList </h3>
-        <div>
-            <img src="../assets/icons/AdicaoItem.png" alt="Icone de adição">
-            <button id="btnAdicionarItem">Adicionar Item</button>
+        <div class="controle-responsaveis">
+            <p>Adicione os responsáveis pelo projeto da empresa</p>
+            <div class="botoes-responsaveis">
+                <button id="btnAdicionarResponsavel">Adicionar Responsável</button>
+                <button id="btnVizualizarResponsavel">Visualizar Responsáveis</button>
+            </div>
         </div>
+        <br>
+        <h3>Liste os itens do CheckList </h3>
 
+        <button id="btnAdicionarItem">
+            <div class="botao-adicionar-item">
+                <img src="../assets/icons/AdicaoItem.png" alt="Icone de adição">
+                <p>Adicionar Item</p>
+            </div>
+        </button>
         <ul>
             <?php foreach ($itens as $item): ?>
                 <li>
@@ -56,14 +67,15 @@ $itens = ChecklistController::listarItens($idAuditoria);
             <?php endforeach; ?>
         </ul>
 
+        <br>
+
+    </main>
+    
+    <footer>
         <div>
-            <?php echo htmlspecialchars(count($itens)) . " itens no checklist."; ?>
+            <p><?php echo htmlspecialchars(count($itens)) . " itens no checklist"; ?></p>
             <a href="index.php?rota=processo_auditoria">Iniciar Auditoria</a>
         </div>
-    </main>
-
-    <footer>
-        <p>© 2025 WeCheck. Por Midup.</p>
     </footer>
 
     <!-- Modais -->
