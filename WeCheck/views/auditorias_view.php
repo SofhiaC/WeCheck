@@ -11,27 +11,34 @@ if (!$idUsuario) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/auditorias.css">
+    <link rel="stylesheet" href="../assets/css/auditorias_lista.css">
     <title>WeCheck</title>
 </head>
 <body>
     <header>
-        <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
-        <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
-
-        <a href="index.php?rota=home">Início</a>
-        <a href="#">Conta</a>
+        <div class="logo">
+            <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
+            <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
+        </div>
+        <div class="botoes-nav">
+            <a id="inicio" href="index.php?rota=cadastro">Início</a> 
+            <a id="conta" href="#">Conta</a>
+        </div>
     </header>
 
     <main>
         <h1>Selecione o seu projeto</h1>
         <p>Ou crie um novo para auditar.</p>
 
-        <div class="novo-projeto">
-            <img src="../assets/icons/CriarProjeto.png" alt="Ícone de adicionar">
-            <a href="index.php?rota=auditoria_criacao">Novo Projeto</a>
-            <p>Faça upload dos seus arquivos de requisitos para iniciar uma nova auditoria.</p>
-        </div>
+        <a id="botao-novo-projeto" href="index.php?rota=auditoria_criacao">
+            <div class="novo-projeto">
+                <img src="../assets/icons/CriarProjeto.png" alt="Ícone de adicionar">
+                <div class="texto-novo-projeto">
+                    <h5>Novo Projeto</h5>
+                    <p>Faça upload dos seus arquivos de requisitos para iniciar uma nova auditoria.</p>
+                </div>
+            </div>
+        </a>
 
         <div class="lista-projetos">
             <?php if (!empty($auditorias)): ?>
