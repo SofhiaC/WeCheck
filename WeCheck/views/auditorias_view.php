@@ -21,7 +21,6 @@ if (!$idUsuario) {
             <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
         </div>
         <div class="botoes-nav">
-            <a id="inicio" href="index.php?rota=cadastro">Início</a> 
             <a id="conta" href="#">Conta</a>
         </div>
     </header>
