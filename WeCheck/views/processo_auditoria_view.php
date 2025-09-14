@@ -149,11 +149,11 @@ foreach ($ncs as $nc) {
                     </label>
 
                     <label>Ação corretiva: <br>
-                        <textarea name="acao_corretiva" rows="3" cols="50" required></textarea>
+                        <textarea name="acao_corretiva" rows="2" cols="50" required></textarea>
                     </label>
 
                     <label>Observação: <br>
-                        <textarea name="observacao" rows="3" cols="50"></textarea>
+                        <textarea name="observacao" rows="2" cols="50"></textarea>
                     </label>
 
                     <label>Responsável: 
@@ -169,11 +169,11 @@ foreach ($ncs as $nc) {
                         </select>
                     </label>
 
-                    <label>Data inicial: <br>
+                    <label>Data inicial:
                         <input type="date" name="data_inicial" required>
                     </label>
 
-                    <label>Data de conclusão: <br>
+                    <label>Data de conclusão:
                         <input type="date" id="data_conclusao_nc" name="data_conclusao">
                     </label>
 

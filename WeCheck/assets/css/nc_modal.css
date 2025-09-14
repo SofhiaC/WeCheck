@@ -44,7 +44,7 @@
 
 /* Título do modal */
 .modal-conteudo h2 {
-    margin: 15px 0;
+    margin: 10px 0;
     color: #201C3F;
     font-size: 1.8rem;
 }
@@ -93,8 +93,8 @@
 
 /* Imagem dentro do modal */
 .modal-conteudo img {
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     margin-bottom: 10px;
 }
 
