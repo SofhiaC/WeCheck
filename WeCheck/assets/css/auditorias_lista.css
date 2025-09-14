@@ -104,16 +104,57 @@ main p{
     margin-left: 15px;
 }
 
-.texto-novo-projeto {
+.novo-projeto h5 {
     color: #201C3F;
     font-size: 1.5rem;
-    margin-bottom: 5px;
-    margin-left: 5px;
 }
 
-.texto-novo-projeto h5 {
-    font-size: 1.5rem;
+.projeto {
+    display: flex;
+    flex-direction: column;   /* organiza título, empresa, link e data em coluna */
+    justify-content: center;
+    margin: 20px;
+    padding: 15px 20px;
+    background-color: #DFECE2;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #201C3F;
+    font-family: Arial, Helvetica, sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+
+/* título */
+.projeto h2 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    color: #201C3F;
+}
+
+/* parágrafos */
+.projeto p {
+    margin: 4px 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* link "Abrir Auditoria" */
+.projeto a {
+    display: inline-block;
+    margin: 10px 0;
+    padding: 8px 12px;
+    background-color: #201C3F;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+}
+
+.projeto a:hover {
+    background-color: #3b3669;
+}
+
 /* footerzinho */
 footer {
     background-color: #201C3F;
