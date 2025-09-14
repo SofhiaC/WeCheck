@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/cadastro.css">
+    <link rel="stylesheet" href="../assets/css/cadastrando.css">
     <title>WeCheck</title>
 </head>
 <body>
     <header>
-        <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
-        <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
-
-        <a href="#">Entrar</a>
+        <div class="logo">
+            <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
+            <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
+        </div>
+        <div class="botoes-nav">
+            <a id="entrar" href="#">Entrar</a>
+        </div>
     </header>
 
-    <main>
+    <main>                                          
         <h1>Crie sua conta</h1>
         <p>Faça seu cadastro para conhecer mais da WeCheck e como ela pode te auxiliar em processos de auditoria.</p>
 
