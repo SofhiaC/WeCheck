@@ -28,7 +28,7 @@ class ResponsavelController {
 
         $sql = "SELECT id_responsavel, nome_responsavel, email_responsavel, cargo_responsavel
                 FROM tb_responsavel
-                WHERE id_auditoria = ?
+                WHERE id_setor = ?
                 ORDER BY id_responsavel DESC";
         $stmt = $db->prepare($sql);
         $stmt->execute([$idAuditoria]);
