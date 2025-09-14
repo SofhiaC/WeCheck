@@ -1,0 +1,273 @@
+/* geral da página */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: Arial, 'Helvetica', sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #fff;
+    color: #201C3F;
+    padding: 20px 0;
+    display: flex;
+}
+
+/* logo da navbar */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+/* botoes da navbar */
+.botoes-nav {
+    margin-left: auto;
+    margin-right: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.botoes-nav a#inicio{
+    text-decoration: none;
+    color: #201C3F;
+    padding: 10px 15px;
+    border: 1px solid #201C3F;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.botoes-nav a#inicio:hover {
+    background-color: #201C3F;
+    color: #fff;
+}
+
+.botoes-nav a#conta {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    background-color: #201C3F;
+}
+
+.botoes-nav a#conta:hover {
+    background-color: #fff;
+    border: 1px solid #201C3F;
+    color: #201C3F;
+}
+
+
+/* textinhos h1 e p*/
+main h1{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+main p{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 1.2rem;
+}
+
+
+/* textinhos h1 e p*/
+main h1{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+main h3{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+main p{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 1.2rem;
+}
+
+/* botao de começar */
+main a{
+    text-decoration: none;
+    color:#fff;
+    background-color: #201C3F;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: inline-block;  
+    margin: 20px;  
+}
+
+.resultados-painel {
+    background-color: #f0f0f0; /* cinza claro */
+    padding: 15px 20px;
+    display: flex; /* deixa os filhos em linha */
+    align-items: center; /* alinha verticalmente ao centro */
+    gap: 25px; /* espaçamento entre os itens */
+    flex-wrap: wrap; /* evita quebra em telas menores */
+    width: 90%;
+    margin-left: 5% ;
+}
+
+/* Estilo para cada bloco de informação */
+.resultados-painel div {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* espaço entre o número e o texto */
+    color: #201C3F;
+    font-size: 1rem;
+}
+
+/* Ajuste das imagens para ficarem no mesmo tamanho */
+.resultados-painel img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Painel NFC */
+#nfc {
+    background-color: #f0f0f0; /* mesmo cinza do painel de resultados */
+    padding: 15px 20px;
+    display: flex; /* coloca tudo em linha */
+    align-items: center; /* centraliza verticalmente */
+    gap: 25px; /* espaço entre cada item */
+    flex-wrap: wrap; /* quebra em telas menores */
+    width: 90%;
+    margin-left: 5%;
+}
+
+/* Título do painel */
+#nfc > p:first-child {
+    color: #201C3F;
+    margin-right: 20px;
+}
+
+/* Cada bloco de informação */
+#nfc div, #nfc p:not(:first-child) {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* espaço entre número e texto */
+    color: #201C3F;
+    font-size: 1rem;
+}
+
+/* Ajuste das imagens */
+#nfc img {
+    width: 30px;
+    height: 30px;
+}
+
+/* Tabela de Checklist */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #f9f9f9; /* leve cinza, combina com os painéis */
+    overflow: hidden; /* borda arredondada */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* Cabeçalho */
+table thead {
+    background-color: #201C3F; /* mesma cor escura do header */
+    color: #fff;
+}
+
+table thead th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* Linhas do corpo */
+table tbody tr {
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.2s;
+}
+
+table tbody tr:hover {
+    background-color: #e6f0e9; /* suave hover verde, combina com botões */
+}
+
+/* Células */
+table tbody td {
+    padding: 10px 15px;
+    color: #201C3F;
+    font-size: 0.95rem;
+}
+
+/* Botões de resultado */
+.btn-resultado {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #29A746;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Responsividade */
+@media screen and (max-width: 600px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+    
+    thead tr {
+        display: none;
+    }
+
+    tbody tr {
+        margin-bottom: 15px;
+        border-bottom: 2px solid #ddd;
+        padding: 10px;
+    }
+
+    tbody td {
+        padding: 10px;
+        text-align: right;
+        position: relative;
+    }
+
+    tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        width: 50%;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    .btn-resultado {
+        width: 100%;
+        text-align: center;
+    }
+
+    
+}
+
+
+
+
+

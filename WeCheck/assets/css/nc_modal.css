@@ -1,0 +1,177 @@
+/* Modal de fundo */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6); /* leve escurecimento do fundo */
+    backdrop-filter: blur(4px); /* efeito blur no fundo */
+    transition: opacity 0.3s ease;
+}
+
+/* Conteúdo do modal */
+.modal-conteudo {
+    background-color: #fff;
+    margin: 8% auto; /* mais próximo do topo, centralizado */
+    padding: 30px 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    position: relative;
+    animation: slideDown 0.3s ease-out;
+    text-align: center;
+}
+
+/* Botão de fechar */
+.fechar {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #201C3F;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.fechar:hover {
+    color: #29A746; /* combina com seus botões de ação */
+}
+
+/* Título do modal */
+.modal-conteudo h2 {
+    margin: 15px 0;
+    color: #201C3F;
+    font-size: 1.8rem;
+}
+
+/* Formulário dentro do modal */
+.modal-conteudo form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    text-align: left;
+}
+
+/* Inputs */
+.modal-conteudo input {
+    width: 100%;
+    padding: 5px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    background-color: #DFECE2;
+}
+
+.modal-conteudo input:focus {
+    outline: none;
+    border-color: #201C3F;
+}
+
+.modal-conteudo textarea{
+    background-color: #DFECE2;
+    border-radius: 8px;
+    border: none;
+}
+
+/* Botão do formulário */
+.modal-conteudo button {
+    padding: 5px 5px;
+    background-color: #201C3F;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Imagem dentro do modal */
+.modal-conteudo img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+}
+
+/* Lista dentro do modal */
+.modal-conteudo ul {
+    list-style: none;
+    padding: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 15px;
+}
+
+.modal-conteudo ul li {
+    padding: 8px 10px;
+    border-bottom: 1px solid #ccc;
+    color: #201C3F;
+}
+
+/* Responsividade */
+@media screen and (max-width: 480px) {
+    .modal-conteudo {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .modal-conteudo h2 {
+        font-size: 1.5rem;
+    }
+
+    .modal-conteudo button {
+        font-size: 0.9rem;
+    }
+}
+
+main{
+    padding-bottom: 70px;
+}
+
+.resumo {
+    background-color: lightgray;
+    color: #201C3F;
+    display: flex;
+    align-items: center;         /* centraliza verticalmente */
+    justify-content: space-between; /* separa os itens: esquerda, centro, direita */
+    padding: 0 20px;             /* espaço interno horizontal */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    box-sizing: border-box;
+}
+
+/* Estilo do botão */
+.resumo a {
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    background-color: #201C3F;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+/* Centralizar o texto da aderência */
+.resumo p#aderencia {
+    text-align: center;
+    flex: 1; /* ocupa espaço central */
+}
+
+/* Itens restantes à esquerda */
+.resumo p#itens {
+    margin: 0;
+}
+
+/* Reset para todos os parágrafos da barra */
+.resumo p {
+    margin: 0;
+}

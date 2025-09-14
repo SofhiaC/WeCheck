@@ -33,24 +33,29 @@ foreach ($ncs as $nc) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/modal_checklist.css">
-    <link rel="stylesheet" href="../assets/css/modal_nc.css">
+    <link rel="stylesheet" href="../assets/css/auditoria_processo.css">
+    <link rel="stylesheet" href="../assets/css/nc_modal.css">
+    <link rel="stylesheet" href="../assets/css/checklist_criacao.css">
     <title>WeCheck</title>
     
 </head>
 <body>
     <header>
-        <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
-        <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
-        <a href="index.php?rota=auditorias">Início</a> 
-        <a href="#">Conta</a>
+        <div class="logo">
+            <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
+            <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
+        </div>
+        <div class="botoes-nav">
+            <a id="inicio" href="index.php?rota=auditorias">Início</a> 
+            <a id="conta" href="#">Conta</a>
+        </div>
     </header>
 
     <main>
         <h1><?php echo htmlspecialchars($auditoria['nome_auditoria']); ?></h1>
         <p><?php echo htmlspecialchars($auditoria['empresa_auditoria']); ?></p>
 
-        <div id="resultados">
+        <div id="resultados" class="resultados-painel">
             <p>Resultados</p>
 
             <img src="../assets/icons/ResultadosCumprem.png" alt="Icone de resultados">
@@ -60,7 +65,7 @@ foreach ($ncs as $nc) {
             <img src="../assets/icons/ResultadoNaoCumpre.png" alt="Icone de resultados">
             <div><span id="cont-nao-conforme">0</span> Não cumpre</div>
         </div>
-
+        <br>
         <div id="nfc">
             <p>NFCs</p>
 
@@ -73,6 +78,7 @@ foreach ($ncs as $nc) {
             <img src="../assets/icons/NFCUrgente.png" alt="Icone de NFCs">
             <p> <span id="cont-nc-urgente"><?php echo $contNcs['urgente']; ?></span> Urgente</p>
         </div>
+        <br>
 
         <h3>Itens do Checklist</h3>
         <table>
@@ -96,9 +102,9 @@ foreach ($ncs as $nc) {
             <tbody>
                 <?php foreach ($itens as $item): ?>
                 <tr>
-                    <td><?php echo $item['ordem_item']; ?></td>
-                    <td><?php echo htmlspecialchars($item['nome_item']); ?></td>
-                    <td id="resultado-<?php echo $item['id_item']; ?>">
+                    <td data-label="Nome do Item"><?php echo $item['ordem_item']; ?></td>
+                    <td data-label="Resultado"><?php echo htmlspecialchars($item['nome_item']); ?></td>
+                    <td data-label="Seleção" id="resultado-<?php echo $item['id_item']; ?>">
                         <?php 
                             $resultado = $item['resultado_item'] ?? null;
                             echo isset($mapVisual[$resultado]) ? $mapVisual[$resultado] : '-';
@@ -121,62 +127,61 @@ foreach ($ncs as $nc) {
 
         <!-- Modal de Não Conformidade -->
         <div id="modalNaoConformidade" class="modal" style="display:none;">
-            <div class="modal-content">
-                <span id="fecharModal" class="close">&times;</span>
+            <div class="modal-conteudo">
+                <span id="fecharModal" class="fechar">&times;</span>
                 <img src="../assets/icons/NaoConformidade.png" alt="Icone de NFCs">
-                <h3>Registrar Não Conformidade</h3>
+                <h2>Registrar Não Conformidade</h2>
                 <form id="formNaoConformidade">
                     <input type="hidden" id="id_item_nc" name="id_item">
 
-                    <label>Nome do Item</label>
-                    <br>
-                    <input type="text" name="nome_item" id="nome_item_nc" readonly>
-                    <br>
+                    <label>Nome do Item:
+                        <input type="text" name="nome_item" id="nome_item_nc" readonly>
+                    </label>
+            
 
-                    <label>Classificação</label>
-                    <br>
-                    <select id="classificacao_nc" name="classificacao" required>
-                        <option value="">Selecione</option>
-                        <option value="leve">Leve</option>
-                        <option value="moderado">Moderado</option>
-                        <option value="urgente">Urgente</option>
-                    </select>
-                    <br>
+                    <label>Classificação: 
+                        <select id="classificacao_nc" name="classificacao" required>
+                            <option value="">Selecione</option>
+                            <option value="leve">Leve</option>
+                            <option value="moderado">Moderado</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </label>
 
-                    <label>Ação corretiva</label>
-                    <br>
-                    <textarea name="acao_corretiva" required></textarea>
-                    <br>
-                    <label>Observação</label>
-                    <br>
-                    <textarea name="observacao"></textarea>
-                    <br>
-                    <label>Responsável</label>
-                    <br>
-                    <select name="id_responsavel" required>
-                        <option value="">Selecione</option>
-                        <?php
-                        // Preencher com os responsáveis cadastrados
-                        require_once __DIR__ . '/../controllers/ResponsavelController.php';
-                        $responsaveis = ResponsavelController::listarResponsaveis($idAuditoria);
-                        foreach($responsaveis as $r){
-                            echo "<option value='{$r['id_responsavel']}'>{$r['nome_responsavel']}</option>";
-                        }
-                        ?>
-                    </select>
-                    <br>
+                    <label>Ação corretiva: <br>
+                        <textarea name="acao_corretiva" rows="3" cols="50" required></textarea>
+                    </label>
 
-                    <label>Data inicial</label>
-                    <input type="date" name="data_inicial" required>
-                    <br>
-                    <label>Data de conclusão</label>
-                    <input type="date" id="data_conclusao_nc" name="data_conclusao">
-                    
-                    <br>
+                    <label>Observação: <br>
+                        <textarea name="observacao" rows="3" cols="50"></textarea>
+                    </label>
+
+                    <label>Responsável: 
+                        <select name="id_responsavel" required>
+                            <option value="">Selecione</option>
+                            <?php
+                            require_once __DIR__ . '/../controllers/ResponsavelController.php';
+                            $responsaveis = ResponsavelController::listarResponsaveis($idAuditoria);
+                            foreach($responsaveis as $r){
+                                echo "<option value='{$r['id_responsavel']}'>{$r['nome_responsavel']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </label>
+
+                    <label>Data inicial: <br>
+                        <input type="date" name="data_inicial" required>
+                    </label>
+
+                    <label>Data de conclusão: <br>
+                        <input type="date" id="data_conclusao_nc" name="data_conclusao">
+                    </label>
+
                     <button type="button" id="salvarNC">Enviar NC</button>
                 </form>
             </div>
         </div>
+
 
 
 
@@ -375,9 +380,9 @@ foreach ($ncs as $nc) {
 
             $aderencia = count($itensAvaliaveis) > 0 ? round(count($itensCumpridos) / count($itensAvaliaveis) * 100, 1) : 0;
         ?>
-        <div>
-            <p><span id="itens-restantes"><?php echo count(array_filter($itens, fn($i) => empty($i['resultado_item']))); ?></span> itens restantes</p>
-            <p><?php echo $aderencia; ?>% de aderência</p>
+        <div class="resumo">
+            <p id="itens"><span id="itens-restantes"><?php echo count(array_filter($itens, fn($i) => empty($i['resultado_item']))); ?></span> itens restantes</p>
+            <p id="aderencia"><?php echo $aderencia; ?>% de aderência</p>
 
             <a href="index.php?rota=listar_ncs&id_auditoria=<?php echo $idAuditoria; ?>">Finalizar Auditoria</a>
         </div>
