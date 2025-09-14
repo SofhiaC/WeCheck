@@ -238,26 +238,63 @@ switch ($rota) {
     }
 
     public static function listarNaoConformidades($idAuditoria) {
-        $pdo = Database::getConnection(); // ou Conexao::getConexao()
-        $sql = "SELECT 
-                    nc.id_nc,
-                    nc.id_checklist,
-                    nc.data_inicial, 
-                    nc.data_conclusao, 
-                    nc.classificacao_nc,
-                    nc.acao_corretiva, 
-                    nc.observacao,
-                    i.nome_item, 
-                    r.nome_responsavel
-                FROM tb_nc nc
-                JOIN tb_checklist i ON nc.id_checklist = i.id_item
-                JOIN tb_responsavel r ON nc.id_responsavel = r.id_responsavel
-                JOIN tb_auditoria a ON i.id_auditoria = a.id_auditoria
-                WHERE a.id_auditoria = :id_auditoria";
+        $pdo = Database::getConnection();
+            $sql = "SELECT 
+                nc.id_nc,
+                nc.id_checklist,
+                nc.data_inicial, 
+                nc.data_conclusao, 
+                nc.classificacao_nc,
+                nc.acao_corretiva, 
+                nc.observacao,
+                i.nome_item, 
+                r.nome_responsavel
+            FROM tb_nc nc
+            JOIN tb_checklist i ON nc.id_checklist = i.id_item
+            JOIN tb_responsavel r ON nc.id_responsavel = r.id_responsavel
+            JOIN tb_auditoria a ON i.id_auditoria = a.id_auditoria
+            WHERE a.id_auditoria = :id_auditoria
+            AND i.resultado_item = 'nao_conforme'";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(['id_auditoria' => $idAuditoria]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public static function normalizarNc($id_nc, $status, $observacao, $data_conclusao) {
+        try {
+            $pdo = Database::getConnection();
+
+            // Atualiza a NC individualmente
+            $stmt = $pdo->prepare("UPDATE tb_nc SET data_conclusao = ?, observacao = ? WHERE id_nc = ?");
+            $stmt->execute([$data_conclusao, $observacao, $id_nc]);
+
+            // Se o status for resolvida, verificar se todas as NCs do mesmo item estão concluídas
+            if ($status === 'resolvida') {
+                $stmt = $pdo->prepare("
+                    SELECT COUNT(*) 
+                    FROM tb_nc 
+                    WHERE id_checklist = (SELECT id_checklist FROM tb_nc WHERE id_nc = ?) 
+                    AND data_conclusao IS NULL
+                ");
+                $stmt->execute([$id_nc]);
+                $pendentes = $stmt->fetchColumn();
+
+                if ($pendentes == 0) {
+                    // Marca checklist como conforme
+                    $stmt = $pdo->prepare("
+                        UPDATE tb_checklist 
+                        SET resultado_item = 'conforme' 
+                        WHERE id_item = (SELECT id_checklist FROM tb_nc WHERE id_nc = ?)
+                    ");
+                    $stmt->execute([$id_nc]);
+                }
+            }
+
+            return true;
+        } catch (PDOException $e) {
+            error_log("Exceção normalizarNc: " . $e->getMessage());
+            return false;
+        }
+    }
 }
 ?>

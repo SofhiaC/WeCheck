@@ -196,4 +196,21 @@ switch ($rota) {
         require_once __DIR__ . '/../views/listar_ncs_view.php';
         break;
 
+    case 'normalizar_nc':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $idNc = $_POST['id_nc'] ?? null;
+            $status = $_POST['status'] ?? null;
+            $observacao = $_POST['observacao'] ?? null;
+            $dataConclusao = $_POST['data_conclusao'] ?? null;
+
+            if ($idNc && $status && $dataConclusao) {
+                require_once __DIR__ . '/../controllers/ProcessoAuditoriaController.php';
+                $sucesso = ProcessoAuditoriaController::normalizarNc($idNc, $status, $observacao, $dataConclusao);
+                echo $sucesso ? 'ok' : 'erro';
+            } else {
+                echo 'erro';
+            }
+        }
+        exit;
+
 }
