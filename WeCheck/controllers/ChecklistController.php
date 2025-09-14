@@ -34,14 +34,11 @@ class ChecklistController {
         }
     }
 
-    public static function listarItens($idAuditoria)
-    {
-        $db = Database::getConnection(); // pega a conexão PDO correta
-
-        $sql = "SELECT id_item, nome_item, ordem_item 
+    public static function listarItens($idAuditoria) {
+        $db = Database::getConnection();
+        $sql = "SELECT id_item, nome_item, ordem_item, resultado_item 
                 FROM tb_checklist 
-                WHERE id_auditoria = ?
-                ORDER BY ordem_item ASC";
+                WHERE id_auditoria = ?";
         $stmt = $db->prepare($sql);
         $stmt->execute([$idAuditoria]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -50,9 +47,12 @@ class ChecklistController {
     public static function atualizarResultado($idItem, $resultado) {
     $db = Database::getConnection();
 
+    var_dump($idItem, $resultado);
+    exit;
+
     $sql = "UPDATE tb_checklist SET resultado_item = ? WHERE id_item = ?";
     $stmt = $db->prepare($sql);
     return $stmt->execute([$resultado, $idItem]);
-}
+    }
 }
 ?>

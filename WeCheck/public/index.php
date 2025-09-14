@@ -50,8 +50,8 @@ switch ($rota) {
         break;
     
     case 'auditorias': 
-        require_once __DIR__ . '/../controllers/AuditoriaController.php';
-        $auditorias = AuditoriaController::listarAuditorias();
+        require_once __DIR__ . '/../controllers/ListarAuditoriaController.php';
+        $auditorias = ListarAuditoriaController::listarAuditorias();
         require __DIR__ . '/../views/auditorias_view.php';
         break;
 
@@ -155,10 +155,45 @@ switch ($rota) {
                 $resultado = $_POST['resultado'] ?? null;
 
                 if ($idItem && $resultado) {
-                    require_once __DIR__ . '/../controllers/ChecklistController.php';
-                    $sucesso = ChecklistController::atualizarResultado($idItem, $resultado);
+                    require_once __DIR__ . '/../controllers/ProcessoAuditoriaController.php';
+                    $sucesso = ProcessoAuditoriaController::atualizarResultado($idItem, $resultado);
                     echo $sucesso ? 'ok' : 'erro';
                 }
             }
             exit;
+
+        case 'salvar_nc':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $idItem       = $_POST['id_item'] ?? null;
+                $classificacao = $_POST['classificacao'] ?? null;
+                $acaoCorretiva = $_POST['acao_corretiva'] ?? null;
+                $observacao    = $_POST['observacao'] ?? null;
+                $responsavel   = $_POST['id_responsavel'] ?? null;
+                $dataInicial   = $_POST['data_inicial'] ?? null;
+                $dataConclusao = $_POST['data_conclusao'] ?? null;
+
+                if ($idItem && $classificacao && $acaoCorretiva && $responsavel && $dataInicial) {
+                    require_once __DIR__ . '/../controllers/ProcessoAuditoriaController.php';
+
+                    $sucesso = ProcessoAuditoriaController::salvarNaoConformidade(
+                        $idItem, 
+                        $classificacao,
+                        $acaoCorretiva, 
+                        $observacao, 
+                        $responsavel, 
+                        $dataInicial, 
+                        $dataConclusao
+                    );
+
+                    echo $sucesso ? 'ok' : 'erro';
+                } else {
+                    echo 'erro';
+                }
+            }
+            exit;
+
+    case 'listar_ncs':
+        require_once __DIR__ . '/../views/listar_ncs_view.php';
+        break;
+
 }

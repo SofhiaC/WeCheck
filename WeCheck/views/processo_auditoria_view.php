@@ -8,6 +8,7 @@ if (!$idAuditoria) {
 
 require_once __DIR__ . '/../controllers/ListarAuditoriaController.php';
 require_once __DIR__ . '/../controllers/ChecklistController.php';
+require_once __DIR__ . '/../controllers/ProcessoAuditoriaController.php';
 
 // Pegar dados da auditoria
 $auditoria = ListarAuditoriaController::pegarAuditoria($idAuditoria);
@@ -15,13 +16,25 @@ if (!$auditoria) die("Auditoria não encontrada.");
 
 // Pegar itens do checklist
 $itens = ChecklistController::listarItens($idAuditoria);
-?>
 
+// Pegar NCs da auditoria
+$ncs = ProcessoAuditoriaController::listarNaoConformidades($idAuditoria); 
+
+// Contar por classificação
+$contNcs = ['leve' => 0, 'moderado' => 0, 'urgente' => 0];
+foreach ($ncs as $nc) {
+    $class = $nc['classificacao_nc'] ?? null;
+    if ($class && isset($contNcs[$class])) {
+        $contNcs[$class]++;
+    }
+}
+?>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/modal_checklist.css">
+    <link rel="stylesheet" href="../assets/css/modal_nc.css">
     <title>WeCheck</title>
     
 </head>
@@ -45,19 +58,21 @@ $itens = ChecklistController::listarItens($idAuditoria);
             <img src="../assets/icons/ResultadoNaoSeAplica.png" alt="Icone de resultados">
             <div><span id="cont-nao-aplicavel">0</span> Não se aplica</div>
             <img src="../assets/icons/ResultadoNaoCumpre.png" alt="Icone de resultados">
-            <div><span id="cont-nao-conforme">0</span> Não se aplicam</div>
+            <div><span id="cont-nao-conforme">0</span> Não cumpre</div>
         </div>
 
         <div id="nfc">
             <p>NFCs</p>
 
             <img src="../assets/icons/NFCLeve.png" alt="Icone de NFCs">
+            <p> <span id="cont-nc-leve"><?php echo $contNcs['leve']; ?></span> Leve</p>
 
             <img src="../assets/icons/NFCModerada.png" alt="Icone de NFCs">
+            <p> <span id="cont-nc-moderado"><?php echo $contNcs['moderado']; ?></span> Moderada</p>
 
             <img src="../assets/icons/NFCUrgente.png" alt="Icone de NFCs">
-
-        </div> 
+            <p> <span id="cont-nc-urgente"><?php echo $contNcs['urgente']; ?></span> Urgente</p>
+        </div>
 
         <h3>Itens do Checklist</h3>
         <table>
@@ -103,6 +118,70 @@ $itens = ChecklistController::listarItens($idAuditoria);
             <button data-valor="nao_conforme">Não Cumpre</button>
         </div>
 
+
+        <!-- Modal de Não Conformidade -->
+        <div id="modalNaoConformidade" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span id="fecharModal" class="close">&times;</span>
+                <img src="../assets/icons/NaoConformidade.png" alt="Icone de NFCs">
+                <h3>Registrar Não Conformidade</h3>
+                <form id="formNaoConformidade">
+                    <input type="hidden" id="id_item_nc" name="id_item">
+
+                    <label>Nome do Item</label>
+                    <br>
+                    <input type="text" name="nome_item" id="nome_item_nc" readonly>
+                    <br>
+
+                    <label>Classificação</label>
+                    <br>
+                    <select id="classificacao_nc" name="classificacao" required>
+                        <option value="">Selecione</option>
+                        <option value="leve">Leve</option>
+                        <option value="moderado">Moderado</option>
+                        <option value="urgente">Urgente</option>
+                    </select>
+                    <br>
+
+                    <label>Ação corretiva</label>
+                    <br>
+                    <textarea name="acao_corretiva" required></textarea>
+                    <br>
+                    <label>Observação</label>
+                    <br>
+                    <textarea name="observacao"></textarea>
+                    <br>
+                    <label>Responsável</label>
+                    <br>
+                    <select name="id_responsavel" required>
+                        <option value="">Selecione</option>
+                        <?php
+                        // Preencher com os responsáveis cadastrados
+                        require_once __DIR__ . '/../controllers/ResponsavelController.php';
+                        $responsaveis = ResponsavelController::listarResponsaveis($idAuditoria);
+                        foreach($responsaveis as $r){
+                            echo "<option value='{$r['id_responsavel']}'>{$r['nome_responsavel']}</option>";
+                        }
+                        ?>
+                    </select>
+                    <br>
+
+                    <label>Data inicial</label>
+                    <input type="date" name="data_inicial" required>
+                    <br>
+                    <label>Data de conclusão</label>
+                    <input type="date" id="data_conclusao_nc" name="data_conclusao">
+                    
+                    <br>
+                    <button type="button" id="salvarNC">Enviar NC</button>
+                </form>
+            </div>
+        </div>
+
+
+
+
+
         <script>
             const menu = document.getElementById('menu-resultado');
             let itemAtual = null;
@@ -115,18 +194,24 @@ $itens = ChecklistController::listarItens($idAuditoria);
             };
 
             // Array de itens vindo do PHP
-            const itens = <?php echo json_encode($itens); ?>;
+            const itens = <?php echo json_encode(array_map(function($i){
+                $i['resultado_item'] = $i['resultado_item'] ?? null;
+                return $i;
+            }, $itens)); ?>;
 
             // Abre o menu ao clicar no botão de resultado
             document.querySelectorAll('.btn-resultado').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    itemAtual = e.target.dataset.id;
+                itemAtual = e.target.dataset.id;
 
-                    // posiciona o menu próximo ao botão
-                    menu.style.display = 'block';
-                    menu.style.top = e.target.getBoundingClientRect().bottom + 'px';
-                    menu.style.left = e.target.getBoundingClientRect().left + 'px';
-                });
+                const rect = e.target.getBoundingClientRect();
+                const scrollTop = window.scrollY || document.documentElement.scrollTop;
+                const scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+
+                menu.style.display = 'block';
+                menu.style.top = (rect.bottom + scrollTop) + 'px';
+                menu.style.left = (rect.left + scrollLeft) + 'px';
+});
             });
 
             // Ao clicar em uma opção do menu
@@ -143,17 +228,13 @@ $itens = ChecklistController::listarItens($idAuditoria);
 
                     // Atualiza os contadores
                     atualizarContadores();
-
-                    // Envia para o servidor via POST
-                    fetch('index.php?rota=atualizar_resultado', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                        body: `id_item=${itemAtual}&resultado=${valor}`
-                    }).then(res => res.text())
-                    .then(data => console.log(data));
+                    atualizarItensRestantes();
 
                     // Fecha o menu
                     menu.style.display = 'none';
+
+                    // Agora chama a função que envia para o servidor E abre o modal se necessário
+                    salvarResultado(itemAtual, valor);
                 });
             });
 
@@ -185,14 +266,120 @@ $itens = ChecklistController::listarItens($idAuditoria);
 
             // Atualiza contadores ao carregar a página
             atualizarContadores();
+
+            function salvarResultado(idItem, valor) {
+                fetch('index.php?rota=atualizar_resultado', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `id_item=${idItem}&resultado=${valor}`
+                })
+                .then(res => res.text())
+                .then(res => {
+                    if (res.trim() === 'ok') {
+                        atualizarContadores();
+
+                        if (valor === 'nao_conforme') {
+                            abrirModal(itemAtual);
+                        }
+                    }
+                });
+            }
+
+            function abrirModal(idItem) {
+                const itemObj = itens.find(i => i.id_item == idItem);
+                if (!itemObj) return;
+
+                document.getElementById('id_item_nc').value = idItem;
+                document.getElementById('nome_item_nc').value = itemObj.nome_item;
+
+                // Preenche a data inicial com a data de hoje
+                const hoje = new Date().toISOString().split('T')[0]; // formato YYYY-MM-DD
+                document.querySelector('input[name="data_inicial"]').value = hoje;
+
+                document.getElementById('modalNaoConformidade').style.display = 'flex';
+            }
+
+            // Fechar modal
+            document.getElementById('fecharModal').addEventListener('click', () => {
+                document.getElementById('modalNaoConformidade').style.display = 'none';
+            });
+
+
+            // Atualiza data de conclusão com base na classificação
+            const selectClassificacao = document.getElementById('classificacao_nc');
+            const inputDataConclusao = document.getElementById('data_conclusao_nc');
+
+            selectClassificacao.addEventListener('change', () => {
+                const hoje = new Date();
+                let dias = 0;
+
+                switch(selectClassificacao.value) {
+                    case 'leve':
+                        dias = 7; 
+                        break;
+                    case 'moderado':
+                        dias = 3;
+                        break;
+                    case 'urgente':
+                        dias = 1;
+                        break;
+                    default:
+                        dias = 0;
+                }
+
+                if(dias > 0){
+                    const dataFinal = new Date(hoje.getTime() + dias * 24 * 60 * 60 * 1000);
+                    inputDataConclusao.value = dataFinal.toISOString().split('T')[0];
+                } else {
+                    inputDataConclusao.value = '';
+                }
+            });
+
+            // Salvar NC
+            document.getElementById('salvarNC').addEventListener('click', () => {
+            const formData = new FormData(document.getElementById('formNaoConformidade'));
+
+            fetch('index.php?rota=salvar_nc', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.text())
+            .then(res => {
+                if (res.trim() === 'ok') {
+                    alert('Não conformidade registrada!');
+                    document.getElementById('modalNaoConformidade').style.display = 'none';
+
+                    // Atualizar contadores de NC dinamicamente
+                    const classificacao = document.getElementById('classificacao_nc').value;
+                    const spanId = 'cont-nc-' + classificacao;
+                    const span = document.getElementById(spanId);
+                    if (span) span.innerText = parseInt(span.innerText) + 1;
+
+                    atualizarItensRestantes();
+                } else {
+                    alert('Erro ao salvar não conformidade.');
+                }
+                });
+            });
+
+        function atualizarItensRestantes() {
+            const restantes = itens.filter(item => item.resultado_item === null || item.resultado_item === '').length;
+            document.getElementById('itens-restantes').innerText = restantes;
+        }
         </script>
 
-        
-        <div>
-            <p>Itens restantes: <?php  ?></p>
-            <p> <?php ?> de aderência</p>
+        <!-- Resumo final -->
+        <?php
+            $itensAvaliaveis = array_filter($itens, fn($i) => ($i['resultado_item'] ?? '') !== 'nao_aplicavel');
+            $itensCumpridos = array_filter($itensAvaliaveis, fn($i) => ($i['resultado_item'] ?? '') === 'conforme');
 
-            <a href="#">Finalizar Auditoria</a>
+            $aderencia = count($itensAvaliaveis) > 0 ? round(count($itensCumpridos) / count($itensAvaliaveis) * 100, 1) : 0;
+        ?>
+        <div>
+            <p><span id="itens-restantes"><?php echo count(array_filter($itens, fn($i) => empty($i['resultado_item']))); ?></span> itens restantes</p>
+            <p><?php echo $aderencia; ?>% de aderência</p>
+
+            <a href="index.php?rota=listar_ncs&id_auditoria=<?php echo $idAuditoria; ?>">Finalizar Auditoria</a>
         </div>
 
 
