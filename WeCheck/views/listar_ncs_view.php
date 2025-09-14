@@ -66,20 +66,21 @@ $ncs = ProcessoAuditoriaController::listarNaoConformidades($idAuditoria);
             </tbody>
         </table>
 
+        <!-- ------------- Modal (único, fora do loop) ------------- -->
+        <?php if (count($ncs) > 0): ?>
         <div id="modalNormalizacao" class="modal">
             <div class="modal-content">
                 <span id="fecharModalNormalizacao" class="close">&times;</span>
-                <img src="../assets/icons/ResultadosCumprem.png" alt="Logo WeCheck">
+                <img src="../assets/icons/ResultadosCumprem.png" alt="Icone de conformidade">
                 <h3>Normalizar Não Conformidade</h3>
                 <br>
                 <form id="formNormalizacao">
                     <input type="hidden" id="id_nc_normalizacao" name="id_nc">
                     <br>
-                    <label>Nome do Item</label> 
+                    <label>Nome do Item</label>
                     <br>
                     <input type="text" id="nome_item_nc_normalizacao" name="nome_item" readonly>
                     <br>
-                    
                     <label>Status</label>
                     <br>
                     <select id="status_nc" name="status" required>
@@ -87,19 +88,19 @@ $ncs = ProcessoAuditoriaController::listarNaoConformidades($idAuditoria);
                         <option value="resolvida">Conforme</option>
                     </select>
                     <br>
-                    <label>Observação</label> 
+                    <label>Observação</label>
                     <br>
                     <textarea name="observacao"></textarea>
                     <br>
                     <label>Data de conclusão</label>
                     <br>
                     <input type="date" id="data_conclusao_nc_normalizacao" name="data_conclusao" required>
-                    <br>
-
+                    <br><br>
                     <button type="button" id="salvarNormalizacao">Salvar Resultado</button>
                 </form>
             </div>
         </div>
+        <?php endif; ?>
         
         <?php
         $itens = ProcessoAuditoriaController::listarItensAuditoria($idAuditoria);
@@ -122,75 +123,39 @@ $ncs = ProcessoAuditoriaController::listarNaoConformidades($idAuditoria);
 
 
         <script>
-            const modalNormalizacao = document.getElementById('modalNormalizacao');
-            const fecharModalNormalizacao = document.getElementById('fecharModalNormalizacao');
+        const modalNormalizacao = document.getElementById('modalNormalizacao');
+        const fecharModalNormalizacao = document.getElementById('fecharModalNormalizacao');
+        let ncAtual = null;
 
-            let ncAtual = null;
+        // Garantir que o modal comece fechado
+        if (modalNormalizacao) modalNormalizacao.style.display = 'none';
 
-            document.querySelectorAll('.btn-normalizar').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const row = e.target.closest('tr');
-                    const ncId = row.dataset.idNc;
+        // Abrir modal ao clicar em botão "Normalizar"
+        document.querySelectorAll('.btn-normalizar').forEach(btn => {
+            btn.addEventListener('click', e => {
+                const row = e.target.closest('tr');
+                const ncId = row.dataset.idNc;
 
-                    // Abrir modal e preencher campos
-                    document.getElementById('id_nc_normalizacao').value = ncId;
-                    document.getElementById('nome_item_nc_normalizacao').value = row.children[1].innerText;
+                // Preencher dados do modal com a NC clicada
+                document.getElementById('id_nc_normalizacao').value = ncId;
+                document.getElementById('nome_item_nc_normalizacao').value = row.children[1].innerText;
 
-                    document.getElementById('modalNormalizacao').style.display = '  flex';
-                });
+                ncAtual = ncId;
+
+                // Abrir modal
+                modalNormalizacao.style.display = 'flex';
             });
+        });
 
-            // Fechar modal
-            document.getElementById('fecharModalNormalizacao').addEventListener('click', () => {
-                document.getElementById('modalNormalizacao').style.display = 'none';
-            });
-
-            // Salvar normalização via fetch
-            document.getElementById('salvarNormalizacao').addEventListener('click', () => {
-                const formData = new FormData(document.getElementById('formNormalizacao'));
-                const ncId = formData.get('id_nc');
-
-                fetch('index.php?rota=normalizar_nc', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(res => res.text())
-                .then(res => {
-                    if (res.trim() === 'ok') {
-                        alert('NC atualizada com sucesso!');
-                        document.getElementById('modalNormalizacao').style.display = 'none';
-
-                        // Remove a linha da tabela
-                        const row = document.querySelector(`tr[data-id-nc="${ncId}"]`);
-                        if (row) row.remove();
-                    } else {
-                        alert('Erro ao atualizar NC.');
-                    }
-                });
-            });
-
-            function abrirFormularioNC(nc) {
-                const form = document.getElementById('formNC');
-
-                // Limpa todos os campos do formulário
-                form.reset();
-
-                // Preenche os campos com a NC atual
-                form.querySelector('[name="id_item"]').value = nc.id_item || '';
-                form.querySelector('[name="nome_item"]').value = nc.nome_item || '';
-                form.querySelector('[name="status"]').value = ''; // começa vazio
-                form.querySelector('[name="observacao"]').value = '';
-                form.querySelector('[name="data_inicial"]').value = nc.data_inicial || '';
-                form.querySelector('[name="data_conclusao"]').value = '';
-            }
-
-            // Fechar modal
+        // Fechar modal
+        if (fecharModalNormalizacao) {
             fecharModalNormalizacao.addEventListener('click', () => {
                 modalNormalizacao.style.display = 'none';
             });
+        }
 
-            // Salvar normalização via fetch
-            document.getElementById('salvarNormalizacao').addEventListener('click', () => {
+        // Salvar NC normalizada via fetch
+        document.getElementById('salvarNormalizacao').addEventListener('click', () => {
             const formData = new FormData(document.getElementById('formNormalizacao'));
 
             fetch('index.php?rota=normalizar_nc', {
@@ -203,50 +168,32 @@ $ncs = ProcessoAuditoriaController::listarNaoConformidades($idAuditoria);
                     alert('NC atualizada com sucesso!');
                     modalNormalizacao.style.display = 'none';
 
-                    // Atualizar a coluna de ação da linha correspondente
+                    // Remove a linha da tabela
                     const row = document.querySelector(`tr[data-id-nc="${ncAtual}"]`);
-                    if (row) {
-                        row.querySelector('.acao-nc').innerHTML = '<span>Resolvida</span>';
-                    }
+                    if (row) row.remove();
                 } else {
                     alert('Erro ao atualizar NC.');
                 }
             });
         });
 
-        function atualizarAderencia() {
-            const linhas = document.querySelectorAll('table tbody tr');
-            let conformes = 0;
-            let restantes = 0;
+            // Atualizar aderência e itens restantes
+            function atualizarAderencia() {
+                const linhas = document.querySelectorAll('table tbody tr');
+                let conformes = 0;
+                let restantes = 0;
 
-            linhas.forEach(row => {
-                const status = row.querySelector('.acao-nc').innerText.toLowerCase();
-                if(status.includes('resolvida')) conformes++;
-                else restantes++;
-            });
+                linhas.forEach(row => {
+                    const status = row.querySelector('.acao-nc').innerText.toLowerCase();
+                    if (status.includes('resolvida')) conformes++;
+                    else restantes++;
+                });
 
-            // Atualiza a view
-            document.getElementById('aderencia').innerText = conformes; // aqui você pode recalcular % se quiser
-            document.getElementById('itens-restantes').innerText = restantes;
-        }
-
-        // Dentro do seu fetch de normalização
-        fetch('index.php?rota=normalizar_nc', {
-            method: 'POST',
-            body: new FormData(document.getElementById('formNormalizacao'))
-        })
-        .then(res => res.text())
-        .then(res => {
-            if(res.trim() === 'ok'){
-                const row = document.querySelector(`tr[data-id-nc="${ncId}"]`);
-                if(row) row.remove();
-
-                // Atualiza adesão e itens restantes
-                atualizarAderencia();
+                // Atualiza a view
+                document.getElementById('aderencia').innerText = conformes; // recalcular % se quiser
+                const itensRestantesEl = document.getElementById('itens-restantes');
+                if (itensRestantesEl) itensRestantesEl.innerText = restantes;
             }
-        });
-
-
         </script>
 
     </main>
