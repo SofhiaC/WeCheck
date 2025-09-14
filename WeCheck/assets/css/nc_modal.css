@@ -7,19 +7,24 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.6); /* leve escurecimento do fundo */
-    backdrop-filter: blur(4px); /* efeito blur no fundo */
+    background-color: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
     transition: opacity 0.3s ease;
+    overflow-y: auto; /* <-- permite scroll na tela */
+    padding: 20px; /* garante distância das bordas da tela */
+    box-sizing: border-box;
 }
 
 /* Conteúdo do modal */
 .modal-conteudo {
     background-color: #fff;
-    margin: 8% auto; /* mais próximo do topo, centralizado */
+    margin: auto; /* centralizado vertical e horizontal */
     padding: 30px 25px;
     border-radius: 12px;
     width: 90%;
     max-width: 450px;
+    max-height: 90vh; /* <-- altura máxima do modal */
+    overflow-y: auto; /* <-- scroll interno se necessário */
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     position: relative;
     animation: slideDown 0.3s ease-out;
