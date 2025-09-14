@@ -33,7 +33,7 @@ $itens = ChecklistController::listarItens($idAuditoria);
             <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
         </div>
         <div class="botoes-nav">
-            <a id="inicio" href="index.php?rota=cadastro">Início</a> 
+            <a id="inicio" href="index.php?rota=auditorias">Início</a> 
             <a id="conta" href="#">Conta</a>
         </div>
     </header>
@@ -86,8 +86,12 @@ $itens = ChecklistController::listarItens($idAuditoria);
             <span class="fechar">&times;</span>
             <img src="../assets/icons/AdicaoItem.png" alt="Icone de adição">
             <h2>Adicionar Item</h2>
+            <br>
             <form id="formAdicionarItem" method="POST" action="index.php?rota=checklist">
-                <label>Nome do Item: <input type="text" name="nome_item" required></label>
+                <label>Nome do Item: 
+                <br>
+                <input type="text" name="nome_item" required></label>
+                <br>
                 <button type="submit">Adicionar</button>
             </form>
         </div>
