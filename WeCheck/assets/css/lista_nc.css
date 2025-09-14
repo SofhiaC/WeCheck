@@ -1,4 +1,3 @@
-/* geral da página */
 * {
     margin: 0;
     padding: 0;
@@ -35,7 +34,7 @@ header {
     align-items: center;
 }
 
-.botoes-nav a#cadastrar{
+.botoes-nav a#inicio{
     text-decoration: none;
     color: #201C3F;
     padding: 10px 15px;
@@ -44,26 +43,26 @@ header {
     transition: background-color 0.3s;
 }
 
-.botoes-nav a#cadastrar:hover {
+.botoes-nav a#inicio:hover {
     background-color: #201C3F;
     color: #fff;
 }
 
-.botoes-nav a#entrar {
+.botoes-nav a#conta {
     text-decoration: none;
     color: #fff;
     padding: 10px 15px;
-    border: 1px solid #fff;
     border-radius: 5px;
     transition: background-color 0.3s;
     background-color: #201C3F;
 }
 
-.botoes-nav a#entrar:hover {
+.botoes-nav a#conta:hover {
     background-color: #fff;
     border: 1px solid #201C3F;
     color: #201C3F;
 }
+
 
 /* textinhos h1 e p*/
 main h1{
@@ -71,6 +70,31 @@ main h1{
     margin: 20px;
     color: #201C3F;
     font-size: 2.5rem;
+    font-weight: bold;
+}
+
+main p{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 1.2rem;
+}
+
+
+/* textinhos h1 e p*/
+main h1{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+main h3{
+    text-align: left;
+    margin: 20px;
+    color: #201C3F;
+    font-size: 1.75rem;
     font-weight: bold;
 }
 
@@ -92,20 +116,67 @@ main a{
     margin: 20px;  
 }
 
-main a:hover{
-    background-color: #fff;
-    border: 1px solid #201C3F;
-    color: #201C3F;
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #f9f9f9; /* leve cinza, combina com os painéis */
+    overflow: hidden; /* borda arredondada */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
-/* footerzinho */
-footer {
+/* Cabeçalho */
+table thead {
+    background-color: #201C3F; /* mesma cor escura do header */
+    color: #fff;
+}
+
+table thead th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* Linhas do corpo */
+table tbody tr {
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.2s;
+}
+
+table tbody tr:hover {
+    background-color: #e6f0e9; /* suave hover verde, combina com botões */
+}
+
+/* Células */
+table tbody td {
+    padding: 10px 15px;
+    color: #201C3F;
+    font-size: 0.95rem;
+}
+
+.btn-normalizar{
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #29A746;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.aderencia{
     background-color: #201C3F;
-    text-align: center;
     padding: 10px 0;
     position: absolute;
     bottom: 0;
     width: 100%;
+}
+
+.aderencia p{
+    color: #fff;
+    text-align: center;
 }
 
 

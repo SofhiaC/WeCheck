@@ -22,16 +22,23 @@ $ncs = ProcessoAuditoriaController::listarNaoConformidades($idAuditoria);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../assets/css/modal_normalizacao.css">
+    <link rel="stylesheet" href="../assets/css/nc_modal.css">
+    <link rel="stylesheet" href="../assets/css/lista_nc.css">
+
+    
     <title>WeCheck</title>
     
 </head>
 <body>
     <header>
-        <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
-        <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
-        <a href="index.php?rota=auditorias">Início</a> 
-        <a href="#">Conta</a>
+        <div class="logo">
+            <img src="../assets/logo/WeCheck_Logo.png" alt="Logo WeCheck"> 
+            <img src="../assets/logo/WeCheck_Escrita.png" alt="Nome WeCheck">
+        </div>
+        <div class="botoes-nav">
+            <a id="inicio" href="index.php?rota=auditorias">Início</a> 
+            <a id="conta" href="#">Conta</a>
+        </div>
     </header>
     <main>
         <h1><?php echo htmlspecialchars($auditoria['nome_auditoria']); ?></h1>
@@ -68,39 +75,39 @@ $ncs = ProcessoAuditoriaController::listarNaoConformidades($idAuditoria);
 
         <!-- ------------- Modal (único, fora do loop) ------------- -->
         <?php if (count($ncs) > 0): ?>
-        <div id="modalNormalizacao" class="modal">
-            <div class="modal-content">
-                <span id="fecharModalNormalizacao" class="close">&times;</span>
-                <img src="../assets/icons/ResultadosCumprem.png" alt="Icone de conformidade">
-                <h3>Normalizar Não Conformidade</h3>
-                <br>
-                <form id="formNormalizacao">
-                    <input type="hidden" id="id_nc_normalizacao" name="id_nc">
-                    <br>
-                    <label>Nome do Item</label>
-                    <br>
-                    <input type="text" id="nome_item_nc_normalizacao" name="nome_item" readonly>
-                    <br>
-                    <label>Status</label>
-                    <br>
-                    <select id="status_nc" name="status" required>
-                        <option value="">Selecione</option>
-                        <option value="resolvida">Conforme</option>
-                    </select>
-                    <br>
-                    <label>Observação</label>
-                    <br>
-                    <textarea name="observacao"></textarea>
-                    <br>
-                    <label>Data de conclusão</label>
-                    <br>
-                    <input type="date" id="data_conclusao_nc_normalizacao" name="data_conclusao" required>
-                    <br><br>
-                    <button type="button" id="salvarNormalizacao">Salvar Resultado</button>
-                </form>
+            <div id="modalNormalizacao" class="modal" style="display:none;">
+                <div class="modal-conteudo">
+                    <span id="fecharModalNormalizacao" class="fechar">&times;</span>
+                    <img src="../assets/icons/ResultadosCumprem.png" alt="Icone de conformidade">
+                    <h2>Normalizar Não Conformidade</h2>
+                    <form id="formNormalizacao">
+                        <input type="hidden" id="id_nc_normalizacao" name="id_nc">
+
+                        <label>Nome do Item:
+                            <input type="text" id="nome_item_nc_normalizacao" name="nome_item" readonly>
+                        </label>
+
+                        <label>Status:
+                            <select id="status_nc" name="status" required>
+                                <option value="">Selecione</option>
+                                <option value="resolvida">Conforme</option>
+                            </select>
+                        </label>
+
+                        <label>Observação: <br>
+                            <textarea name="observacao" rows="3" cols="50"></textarea>
+                        </label>
+
+                        <label>Data de conclusão:
+                            <input type="date" id="data_conclusao_nc_normalizacao" name="data_conclusao" required>
+                        </label>
+
+                        <button type="button" id="salvarNormalizacao">Salvar Resultado</button>
+                    </form>
+                </div>
             </div>
-        </div>
         <?php endif; ?>
+
         
         <?php
         $itens = ProcessoAuditoriaController::listarItensAuditoria($idAuditoria);
@@ -117,7 +124,7 @@ $ncs = ProcessoAuditoriaController::listarNaoConformidades($idAuditoria);
 
         ?>
 
-        <div>
+        <div class="aderencia">
             <p>Aderência: <span id="aderencia"><?= $aderencia ?></span>%</p>
         </div>
 
