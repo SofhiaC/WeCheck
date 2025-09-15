@@ -230,12 +230,25 @@ switch ($rota) {
                 (id_checklist, data_inicial, data_conclusao, classificacao_nc, acao_corretiva, observacao, id_responsavel)
                 VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $db->prepare($sql);
-        return $stmt->execute([$idItem, $dataInicial, $dataConclusao, $classificacao, $acaoCorretiva, $observacao, $idResponsavel]);
-        
-        if(!$stmt->execute([$idItem, $dataInicial, $dataConclusao, $classificacao, $acaoCorretiva, $observacao, $idResponsavel])){
-        print_r($stmt->errorInfo()); // mostra o erro do PDO
-}
+        $ok = $stmt->execute([$idItem, $dataInicial, $dataConclusao, $classificacao, $acaoCorretiva, $observacao, $idResponsavel]);
+
+        if ($ok) {
+            $mensagem = "Responsável: $idResponsavel\n";
+            $mensagem .= "Nova Não-Conformidade atribuída a você!\n";
+            $mensagem .= "Item: $idItem\n";
+            $mensagem .= "Classificação: $classificacao\n";
+            $mensagem .= "Ação corretiva: $acaoCorretiva\n";
+            $mensagem .= "Data inicial: $dataInicial\n";
+            $mensagem .= "Data limite de conclusão: $dataConclusao\n";
+            $mensagem .= "Por favor, resolva antes do prazo.\n";
+            $mensagem .= "-----------------------------\n";
+
+            file_put_contents(__DIR__ . '/../emails/emails.txt', $mensagem, FILE_APPEND);
+        }
+
+        return $ok;
     }
+
 
     public static function listarNaoConformidades($idAuditoria) {
         $pdo = Database::getConnection();
