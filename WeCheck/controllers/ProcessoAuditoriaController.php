@@ -241,7 +241,7 @@ switch ($rota) {
             $mensagem .= "Data inicial: $dataInicial\n";
             $mensagem .= "Data limite de conclusão: $dataConclusao\n";
             $mensagem .= "Por favor, resolva antes do prazo.\n";
-            $mensagem .= "-----------------------------\n";.
+            $mensagem .= "-----------------------------\n";
 
             file_put_contents(__DIR__ . '/../emails/emails.txt', $mensagem, FILE_APPEND);
         }
