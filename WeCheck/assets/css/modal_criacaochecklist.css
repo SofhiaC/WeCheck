@@ -1,29 +1,34 @@
 /* Modal de fundo */
 .modal {
-    display: none;
+    display: none; /* escondido inicialmente */
     position: fixed;
     z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.6); /* leve escurecimento do fundo */
-    backdrop-filter: blur(4px); /* efeito blur no fundo */
-    transition: opacity 0.3s ease;
+    background-color: rgba(0,0,0,0.7); /* fundo opaco */
+    backdrop-filter: blur(4px); /* leve blur */
+    display: flex;
+    justify-content: center; /* centraliza horizontal */
+    align-items: center;     /* centraliza vertical */
+    padding: 20px;           /* evita encostar nas bordas */
+    overflow-y: auto;        /* scroll caso o modal seja alto */
 }
 
 /* Conteúdo do modal */
 .modal-conteudo {
     background-color: #fff;
-    margin: 8% auto; /* mais próximo do topo, centralizado */
     padding: 30px 25px;
     border-radius: 12px;
     width: 90%;
     max-width: 450px;
+    overflow-y: auto;      
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     position: relative;
     animation: slideDown 0.3s ease-out;
     text-align: center;
+    margin: auto; /* garante centralização vertical */
 }
 
 /* Botão de fechar */
@@ -85,6 +90,8 @@
     transition: background-color 0.3s;
 }
 
+
+
 /* Imagem dentro do modal */
 .modal-conteudo img {
     width: 100px;
@@ -107,6 +114,12 @@
     color: #201C3F;
 }
 
+/* Animação do modal */
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
 /* Responsividade */
 @media screen and (max-width: 480px) {
     .modal-conteudo {
@@ -122,3 +135,29 @@
         font-size: 0.9rem;
     }
 }
+
+
+/* Dialog básico */
+dialog {
+    border: none; /* remove borda padrão */
+    border-radius: 12px;
+    padding: 30px 25px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+    position: fixed;
+    left: 50%; 
+    top: 50%;  
+    transform: translate(-50%, -50%);
+}
+
+/* Fundo escuro do dialog */
+dialog::backdrop {
+    background-color: rgba(0,0,0,0.7); /* fundo opaco */
+    backdrop-filter: blur(4px); /* blur leve */
+}
+
+
