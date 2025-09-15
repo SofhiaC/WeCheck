@@ -48,6 +48,7 @@ $responsaveis = ResponsavelController::listarResponsaveis($idAuditoria);
         <div class="controle-responsaveis">
             <p>Adicione os responsáveis pelo projeto da empresa</p>
             <div class="botoes-responsaveis">
+                <button id="btnCadastrarSetor" type="button">Cadastrar setor</button>
                 <button id="btnAdicionarResponsavel" type="button">Adicionar Responsável</button>
                 <button id="btnVizualizarResponsavel" type="button">Visualizar Responsáveis</button>
             </div>
@@ -83,6 +84,37 @@ $responsaveis = ResponsavelController::listarResponsaveis($idAuditoria);
     </footer>
 
     <!-- DIALOGS (modais) -->
+    <!-- modal cadastrar setor -->
+    <dialog id="modalaSetor" class="dialog" aria-labelledby="tituloSetor">
+        <div class="modal-conteudo" role="document">
+            <button class="fechar" type="button" aria-label="Fechar">&times;</button>
+
+            <img src="../assets/icons/Setor.png" alt="Ícone setor">
+            <h2 id="tituloSetor">Cadastrar Setor</h2>
+
+            <form method="POST" action="index.php?rota=setor">
+            <!-- garantir que o id da auditoria vem -->
+            <input type="hidden" name="id_auditoria" value="<?php echo htmlspecialchars($idAuditoria); ?>">
+
+            <label>Nome Setor:<br>
+                <input type="text" name="nome_setor" required>
+            </label>
+
+            <label>Gerente Responsável:<br>
+                <input type="text" name="gerente_responsavel" required>
+            </label>
+
+            <label>Email gerente:<br>
+                <input type="email" name="email_gerente" required>
+            </label>
+
+            <div style="display:flex; gap:.5rem; justify-content:center; margin-top:12px;">
+                <button type="submit">Cadastrar</button>
+            </div>
+            </form>
+        </div>
+        </dialog>
+
     <!-- Modal Adicionar Item -->
     <dialog id="modalItem" class="dialog">
         <div class="modal-conteudo">
@@ -121,7 +153,17 @@ $responsaveis = ResponsavelController::listarResponsaveis($idAuditoria);
                 </label>
                 <br>
                 <label>Setor:<br>
-                    <input type="text" name="setor_responsavel" required>
+                    <select name="id_setor" required>
+                        <option value="">-- Selecione um setor --</option>
+                        <?php 
+                        require_once __DIR__ . '/../controllers/SetorController.php';
+                        $setores = SetorController::listarSetores($idAuditoria);
+                        foreach ($setores as $setor): ?>
+                            <option value="<?= $setor['id_setor'] ?>">
+                                <?= htmlspecialchars($setor['nome_setor']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </label>
                 <br><br>
                 <button type="submit">Adicionar</button>
@@ -138,9 +180,12 @@ $responsaveis = ResponsavelController::listarResponsaveis($idAuditoria);
             <ul class="lista-responsaveis">
                 <?php foreach ($responsaveis as $resp): ?>
                     <li>
-                        <?php echo htmlspecialchars($resp['nome_responsavel']); ?>
+                        <strong><?php echo htmlspecialchars($resp['nome_responsavel']); ?></strong>
                         (<?php echo htmlspecialchars($resp['email_responsavel']); ?>) -
                         <?php echo htmlspecialchars($resp['cargo_responsavel']); ?>
+                        <?php if (!empty($resp['nome_setor'])): ?>
+                            <em>[<?php echo htmlspecialchars($resp['nome_setor']); ?>]</em>
+                        <?php endif; ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -155,53 +200,66 @@ $responsaveis = ResponsavelController::listarResponsaveis($idAuditoria);
             const dlg = document.getElementById(dialogId);
             if (!btn || !dlg) return;
 
-            const closeBtn = dlg.querySelector('.fechar');
+            const closeBtns = dlg.querySelectorAll('.fechar');
 
-            // Se navegador suporta dialog nativo
-            if (typeof HTMLDialogElement === 'function' || typeof HTMLDialogElement === 'object') {
-                btn.addEventListener('click', () => {
-                    try { dlg.showModal(); } catch (e) { dlg.setAttribute('open',''); }
-                });
+            // garante que exista um X visível
+            closeBtns.forEach(b => { if (!b.innerHTML.trim()) b.innerHTML = '&times;'; });
 
-                closeBtn && closeBtn.addEventListener('click', () => dlg.close());
-
-                // clique na sombra do backdrop fecha
-                dlg.addEventListener('click', (e) => {
-                    if (e.target === dlg) dlg.close();
-                });
-
-                // ESC
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && dlg.open) dlg.close();
-                });
-            } else {
-                // fallback simples para navegadores sem <dialog>
-                btn.addEventListener('click', () => {
+            function openDialog() {
+                // abrir dialog nativo quando disponível
+                if (typeof dlg.showModal === 'function') {
+                    try {
+                        dlg.showModal();
+                    } catch (e) {
+                        dlg.setAttribute('open','');
+                    }
+                    document.body.classList.add('dialog-open');
+                } else {
+                    // fallback simples
                     dlg.setAttribute('data-open', 'true');
                     document.body.classList.add('dialog-open');
-                });
+                }
 
-                closeBtn && closeBtn.addEventListener('click', () => {
-                    dlg.removeAttribute('data-open');
-                    document.body.classList.remove('dialog-open');
-                });
-
-                dlg.addEventListener('click', (e) => {
-                    if (e.target === dlg) {
-                        dlg.removeAttribute('data-open');
-                        document.body.classList.remove('dialog-open');
-                    }
-                });
-
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && dlg.hasAttribute('data-open')) {
-                        dlg.removeAttribute('data-open');
-                        document.body.classList.remove('dialog-open');
-                    }
-                });
+                // foco no primeiro input do modal
+                const first = dlg.querySelector('input,select,textarea,button');
+                if (first) first.focus();
             }
+
+            function closeDialog() {
+                if (typeof dlg.close === 'function') {
+                    try { dlg.close(); } catch (e) { dlg.removeAttribute('open'); }
+                } else {
+                    dlg.removeAttribute('data-open');
+                }
+                document.body.classList.remove('dialog-open');
+                btn.focus();
+            }
+
+            btn.addEventListener('click', openDialog);
+
+            // fechar por todos os botões .fechar
+            closeBtns.forEach(cb => cb.addEventListener('click', closeDialog));
+
+            // clique fora (backdrop)
+            dlg.addEventListener('click', (e) => {
+                if (e.target === dlg) closeDialog();
+            });
+
+            // ESC (fallback)
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && (dlg.hasAttribute('open') || dlg.hasAttribute('data-open'))) {
+                    closeDialog();
+                }
+            });
+
+            // quando cancelar (comportamento nativo do dialog)
+            dlg.addEventListener('cancel', (e) => {
+                document.body.classList.remove('dialog-open');
+            });
         }
 
+        // registrar seus modais (adicione aqui novos modais se criar outros)
+        setupModal('btnCadastrarSetor', 'modalaSetor');
         setupModal('btnAdicionarItem', 'modalItem');
         setupModal('btnAdicionarResponsavel', 'modalResponsavel');
         setupModal('btnVizualizarResponsavel', 'modalVizualizarResponsavel');

@@ -30,7 +30,9 @@ CREATE TABLE tb_responsavel (
     email_responsavel VARCHAR(100),
     cargo_responsavel VARCHAR(100),
     id_auditoria INT,
-    FOREIGN KEY (id_auditoria) REFERENCES tb_auditoria(id_auditoria)
+	id_setor INT,
+    FOREIGN KEY (id_auditoria) REFERENCES tb_auditoria(id_auditoria),
+    FOREIGN KEY (id_setor) REFERENCES tb_setor(id_setor)
 );
 
 CREATE TABLE tb_checklist (

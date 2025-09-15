@@ -108,25 +108,28 @@ switch ($rota) {
     break;
 
     case 'adicionar_responsavel':
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $idAuditoria = $_SESSION['id_auditoria'] ?? null;
-        $nome = $_POST['nome_responsavel'] ?? null;
-        $email = $_POST['email_responsavel'] ?? null;
-        $cargo = $_POST['cargo_responsavel'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $idAuditoria = $_SESSION['id_auditoria'] ?? null;
+            $nome = $_POST['nome_responsavel'] ?? null;
+            $email = $_POST['email_responsavel'] ?? null;
+            $cargo = $_POST['cargo_responsavel'] ?? null;
+            $idSetor = $_POST['id_setor'] ?? null; // <--- novo
 
-        if ($idAuditoria && $nome && $email) {
-            require_once __DIR__ . '/../controllers/ResponsavelController.php';
-            $resultado = ResponsavelController::adicionarResponsavel($idAuditoria, $nome, $email, $cargo);
+            if ($idAuditoria && $nome && $email && $idSetor) {
+                require_once __DIR__ . '/../controllers/ResponsavelController.php';
+                $resultado = ResponsavelController::adicionarResponsavel(
+                    $idAuditoria, $nome, $email, $cargo, $idSetor
+                );
 
-            if ($resultado['success']) {
-                header("Location: index.php?rota=checklist"); // volta para checklist
-                exit;
-            } else {
-                die($resultado['message']);
+                if ($resultado['success']) {
+                    header("Location: index.php?rota=checklist");
+                    exit;
+                } else {
+                    die($resultado['message']);
+                }
             }
         }
-    }
-    break;
+        break;
 
     case 'processo_auditoria':
         $idAuditoria = $_SESSION['id_auditoria'] ?? null;
@@ -212,5 +215,26 @@ switch ($rota) {
             }
         }
         exit;
+
+        case 'setor':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $idAuditoria = $_POST['id_auditoria'] ?? null;
+                $nomeSetor = $_POST['nome_setor'] ?? null;
+                $gerente = $_POST['gerente_responsavel'] ?? null;
+                $emailGerente = $_POST['email_gerente'] ?? null;
+
+                if ($idAuditoria && $nomeSetor && $gerente && $emailGerente) {
+                    require_once __DIR__ . '/../controllers/SetorController.php';
+                    $resultado = SetorController::adicionarSetor($idAuditoria, $nomeSetor, $gerente, $emailGerente);
+
+                    if ($resultado['success']) {
+                        header("Location: index.php?rota=checklist"); // volta para checklist
+                        exit;
+                    } else {
+                        die($resultado['message']);
+                    }
+                }
+            }
+            break;
 
 }
