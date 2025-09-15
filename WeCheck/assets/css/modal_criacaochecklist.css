@@ -72,6 +72,16 @@
     background-color: #DFECE2;
 }
 
+.modal-conteudo select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    background-color: #DFECE2;
+}
+
 .modal-conteudo input:focus {
     outline: none;
     border-color: #201C3F;
